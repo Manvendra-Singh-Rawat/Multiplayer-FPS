@@ -9,7 +9,7 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayerController)
 	Super::PostLogin(NewPlayerController);
 
 	PlayerCountInSession = GameState.Get()->PlayerArray.Num();
-	if (PlayerCountInSession >= 2)
+	if (PlayerCountInSession >= 5)
 	{
 		UWorld* World = GetWorld();
 		if (World != nullptr)
