@@ -33,6 +33,7 @@ void UMultiplayerSessionsSubsystem::CreateSession(int32 NumPublicConnections, FS
 		DestroySession();
 		
 		return;
+		//DestroySessionCompleteDelegateHandle = OnlineSessionInterface->AddOnDestroySessionCompleteDelegate_Handle(DestroySessionCompleteDelegate);
 	}
 
 	SessionSettings = MakeShareable(new FOnlineSessionSettings());
