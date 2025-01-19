@@ -3,6 +3,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Weapon.h"
 
 APlayableCharacter::APlayableCharacter()
 {
@@ -64,6 +66,42 @@ void APlayableCharacter::Turn(float Axis)
 void APlayableCharacter::LookUp(float Axis)
 {
 	AddControllerPitchInput(Axis);
+}
+
+void APlayableCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
+{
+	if (OverlappingWeapon != nullptr)
+	{
+		OverlappingWeapon->ShowPickupWidget(true);
+	}
+	else if (LastWeapon != nullptr)
+	{
+		LastWeapon->ShowPickupWidget(false);
+	}
+}
+
+void APlayableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	//DOREPLIFETIME(APlayableCharacter, OverlappingWeapon);
+	DOREPLIFETIME_CONDITION(APlayableCharacter, OverlappingWeapon, COND_OwnerOnly);
+}
+
+void APlayableCharacter::SetOverlappingWeapon(AWeapon* Weapon)
+{
+	if (OverlappingWeapon != nullptr)
+	{
+		OverlappingWeapon->ShowPickupWidget(false);
+	}
+	OverlappingWeapon = Weapon;
+	if (IsLocallyControlled())
+	{
+		if (OverlappingWeapon != nullptr)
+		{
+			OverlappingWeapon->ShowPickupWidget(true);
+		}
+	}
 }
 
 void APlayableCharacter::Tick(float DeltaTime)

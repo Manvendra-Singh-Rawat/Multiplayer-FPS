@@ -26,6 +26,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverheadWidget;
 
+	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
+	class AWeapon* OverlappingWeapon;
+
 protected:
 	UFUNCTION()
 	void MoveForward(float Axis);
@@ -35,4 +38,11 @@ protected:
 	void Turn(float Axis);
 	UFUNCTION()
 	void LookUp(float Axis);
+
+	UFUNCTION()
+	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
+
+public:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void SetOverlappingWeapon(AWeapon* Weapon);
 };
